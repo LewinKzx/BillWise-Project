@@ -1,6 +1,6 @@
-# BillWise ⚡ Electricity Bill Predictor for Student Houses in Seri Iskandar
+# BillWise Electricity Bill Predictor for Student Houses in Seri Iskandar
 
-A machine learning web app that runs locally (http://127.0.0.1:5000). It:
+A machine learning web app that runs locally. It:
 
 1. **Predicts the monthly TNB bill**, with a likely range, using the real TNB domestic tariff (EEI, KWTBB, retail charge, SST)
 2. **Finds the appliances that cost the most**, with an RM and kWh breakdown
@@ -140,17 +140,14 @@ predicted kWh = physics estimate × correction factor
 
 **Appliance breakdown:** the physics estimate per appliance, scaled by your correction factor so it adds up to the predicted total.
 
-## 6. Notebook or VS Code?
 
-**You don't need a notebook.** Running `python train.py` in VS Code on your laptop is enough. The dataset is tiny, so training takes seconds on any laptop with no GPU. A notebook (Jupyter or Google Colab) is only useful if you want to explore the data step by step with charts for your report. VS Code can open `.ipynb` notebooks too, if you want one later.
 
-## 7. Using real survey data later
+## 6. Using real survey data 
 
 1. Download the Google Form responses as Excel and save it as `data/BillWise-responses.xlsx` (or change `DATA_PATH` / `DATA_SHEET` in `config.py`).
 2. Keep the question wording the same. `COLUMN_MAP` in `features.py` links each form question to the model's inputs; if you reword a question, update it there too. `train.py` stops with a clear error listing any question it can't find.
 3. Run `python train.py` again.
 
-**Important for the report:** the synthetic data was generated from the same wattage assumptions used in `appliances.py`, so scores on it are optimistic. Report it as "trained on simulated data generated from appliance energy ratings", and measure final accuracy on **real bills**.
 
 ## 8. Updating the tariff
 
