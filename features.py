@@ -5,27 +5,27 @@ import pandas as pd
 
 from appliances import physics_kwh
 
-# Survey column -> internal name
+# Survey column (Google Form question, "Form Responses 1" sheet) -> internal name
 COLUMN_MAP = {
-    "Occupants": "occupants",
-    "No. of air-conditioners": "n_ac",
-    "Typical AC horsepower": "ac_hp",
-    "Inverter AC?": "inverter",
-    "AC hours/day (each)": "ac_hours",
-    "AC temperature (°C)": "ac_temp",
-    "Electric water heater?": "heater",
-    "Water heater type": "heater_type",
-    "Hot shower minutes/person/day": "shower_min",
-    "Refrigerators": "fridges",
-    "PC hours/day": "pc_hours",
-    "Total fan hours/day": "fan_hours",
-    "No. of lights": "lights",
-    "Light hours/day": "light_hours",
-    "Washing machine loads/week": "washer_loads",
-    "All housemates home this month?": "all_home",
-    "Oct 2026 kWh": "kwh_oct",
-    "Sep 2026 kWh": "kwh_sep",
-    "Aug 2026 kWh": "kwh_aug",
+    "How many people live in your house, including you?": "occupants",
+    "Were all your housemates living in the house this month?": "all_home",
+    "How many air-conditioners are in the house?": "n_ac",
+    "What is the typical horsepower (HP) of your air-conditioners?": "ac_hp",
+    "Are your air-conditioners inverter models?": "inverter",
+    "On average, how many hours a day is each air-conditioner switched on?": "ac_hours",
+    "What temperature do you usually set the air-conditioner to (°C)?": "ac_temp",
+    "Does your house have an electric water heater?": "heater",
+    "What type of water heater is it?": "heater_type",
+    "On average, how many minutes of hot shower does each person take per day?": "shower_min",
+    "How many refrigerators are in the house?": "fridges",
+    "How many hours per day are desktop PCs or gaming PCs used in total?": "pc_hours",
+    "How many hours per day are all fans used in total?": "fan_hours",
+    "How many lights are in the house?": "lights",
+    "On average, how many hours a day are the lights switched on?": "light_hours",
+    "How many loads of washing do you do per week?": "washer_loads",
+    "October 2026 usage (kWh)": "kwh_oct",
+    "September 2026 usage (kWh)": "kwh_sep",
+    "August 2026 usage (kWh)": "kwh_aug",
 }
 
 BASE_FEATURES = [
@@ -49,7 +49,10 @@ def _num(value, default=0.0):
 def _yes(value):
     if isinstance(value, bool):
         return value
-    return str(value).strip().lower() in {"yes", "y", "true", "1", "on"}
+
+    text = str(value).strip().lower()
+
+    return text in {"yes", "y", "true", "1", "on"} or text.startswith("yes,")
 
 
 def clean_household(raw: dict) -> dict:
@@ -81,8 +84,13 @@ def clean_household(raw: dict) -> dict:
 
 
 def load_dataset(path: str, sheet: str) -> pd.DataFrame:
-    """Read the survey/synthetic Excel file into a clean feature table."""
-    df = pd.read_excel(path, sheet_name=sheet).rename(columns=COLUMN_MAP)
+    """Read the survey Excel file into a clean feature table."""
+    df = pd.read_excel(path, sheet_name=sheet)
+    df.columns = [str(c).strip() for c in df.columns]
+    missing = [c for c in COLUMN_MAP if c not in df.columns]
+    if missing:
+        raise ValueError(f"{path} is missing these survey columns: {missing}")
+    df = df.rename(columns=COLUMN_MAP)
     rows = []
     for _, r in df.iterrows():
         h = clean_household(r.to_dict())

@@ -49,7 +49,7 @@ button { background: var(--accent); color: #fff; border: none; padding: 5px 12px
 button:hover { opacity: .9; }
 table { width: 100%; border-collapse: collapse; font-size: .9rem; }
 td, th { padding: 7px 4px; border-bottom: 1px solid var(--line); text-align: left; }
-td:last-child, th:not(:first-child) { text-align: right; }
+td:not(:first-child), th:not(:first-child) { text-align: right; }
 tr.total td { font-weight: 700; }
 summary { cursor: pointer; }
 footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 16px; }

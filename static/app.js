@@ -209,7 +209,7 @@ async function loadModelInfo() {
     const r = m[key].results;
     return `<h3>${title} · best: ${m[key].algorithm}</h3>
       <table><tr><th>Method</th><th>MAE (kWh)</th><th>R²</th><th>MAPE</th></tr>
-      ${Object.entries(r).map(([n, s]) => `<tr${n === m[key].algorithm ? ' class="total"' : ""}><td>${n}</td><td>${s.MAE_kWh}</td><td>${s.R2}</td><td>${s["MAPE_%"]}%</td></tr>`).join("")}
+      ${Object.entries(r).map(([n, s]) => `<tr${n === m[key].algorithm ? ' class="total"' : ""}><td>${n}</td><td>${s.MAE_kWh.toFixed(1)}</td><td>${s.R2.toFixed(3)}</td><td>${s["MAPE_%"].toFixed(1)}%</td></tr>`).join("")}
       </table>`;
   };
   $("modelInfo").innerHTML =

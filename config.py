@@ -26,7 +26,7 @@ EEI_TABLE = [
 GRID_EMISSION_FACTOR = 0.740
 
 # ---- Paths ----
-DATA_PATH = "data/BillWise_Synthetic_Dataset_v3.xlsx"
-DATA_SHEET = "Synthetic Data"
+DATA_PATH = "data/BillWise-responses.xlsx"
+DATA_SHEET = "Form Responses 1"
 MODEL_PATH = "models/billwise_model.joblib"
 REPORT_DIR = "reports"

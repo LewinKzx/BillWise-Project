@@ -22,7 +22,7 @@ Extra features:
 
 ```
 billwise/
-├── data/BillWise_Synthetic_Dataset_v3.xlsx   training data (replace with real data later)
+├── data/BillWise-responses.xlsx   survey responses (Google Form, sheet "Form Responses 1")
 ├── config.py        tariff rates, emission factor, file paths
 ├── tariff.py        kWh → RM bill (matches TNB's official table)
 ├── appliances.py    physics estimate per appliance (wattage × hours × days)
@@ -72,14 +72,14 @@ This takes a few seconds and prints a table like this:
 
 ```
 === Model A (no history): 52 households, 17 features ===
-Physics baseline (no ML)   MAE   97.7 kWh
-Linear Regression          MAE   77.8 ± 22.8  kWh  RMSE   98.7  R²  0.733  MAPE 14.2%
-Ridge Regression           MAE   77.8 ± 22.9  kWh  RMSE   98.5  R²  0.735  MAPE 14.2%
-Decision Tree              MAE   88.4 ± 27.9  kWh  RMSE  111.1  R²   0.66  MAPE 15.9%
-Random Forest              MAE   84.5 ± 22.4  kWh  RMSE  104.5  R²  0.709  MAPE 15.1%
+Physics baseline (no ML)   MAE  128.8 kWh
+Linear Regression          MAE  106.0 ± 30.4  kWh  RMSE  139.2  R²  0.478  MAPE 24.5%
+Ridge Regression           MAE  106.3 ± 30.6  kWh  RMSE  139.4  R²  0.477  MAPE 24.6%
+Decision Tree              MAE  122.1 ± 35.8  kWh  RMSE  162.7  R²  0.305  MAPE 27.2%
+Random Forest              MAE  111.1 ± 36.0  kWh  RMSE  144.8  R²  0.451  MAPE 25.0%
 --> Best: Linear Regression
 === Model B (with last month) ===
-Ridge Regression           MAE   32.9 ± 11.6  kWh  RMSE   44.6  R²  0.941  MAPE 5.6%
+Ridge Regression           MAE   44.1 ± 22.5  kWh  RMSE   60.6  R²  0.894  MAPE 9.3%
 --> Best: Ridge Regression
 ```
 
@@ -117,12 +117,12 @@ predicted kWh = physics estimate × correction factor
 
 | Model A (no history) | MAE (kWh) |
 |---|---|
-| Physics baseline (no ML) | 97.7 |
-| Correction factor, Linear Regression | **77.8** |
+| Physics baseline (no ML) | 128.8 |
+| Correction factor, Linear Regression | **106.0** |
 
 | Model B (+ last month) | MAE (kWh) |
 |---|---|
-| Correction factor, Ridge | **32.9** |
+| Correction factor, Ridge | **44.1** |
 
 (In an earlier version on the previous dataset, a plain Random Forest predicting kWh directly scored 100.1 kWh for Model A and 45.7 kWh for Model B, against 84.7 and 35.0 for the correction-factor design.)
 
@@ -146,8 +146,8 @@ predicted kWh = physics estimate × correction factor
 
 ## 7. Using real survey data later
 
-1. Put your real responses in an Excel file with the **same column names** as the `Synthetic Data` sheet.
-2. Change `DATA_PATH` / `DATA_SHEET` in `config.py`, or keep training on synthetic data and **test** on the real data.
+1. Download the Google Form responses as Excel and save it as `data/BillWise-responses.xlsx` (or change `DATA_PATH` / `DATA_SHEET` in `config.py`).
+2. Keep the question wording the same. `COLUMN_MAP` in `features.py` links each form question to the model's inputs; if you reword a question, update it there too. `train.py` stops with a clear error listing any question it can't find.
 3. Run `python train.py` again.
 
 **Important for the report:** the synthetic data was generated from the same wattage assumptions used in `appliances.py`, so scores on it are optimistic. Report it as "trained on simulated data generated from appliance energy ratings", and measure final accuracy on **real bills**.
