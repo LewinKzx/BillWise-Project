@@ -1,0 +1,79 @@
+:root {
+  --bg: #f4f7f5; --panel: #fff; --ink: #1d2b24; --muted: #66756d;
+  --accent: #0f7b5b; --accent-soft: #e2f3ec; --warn: #b7791f; --danger: #c0392b;
+  --line: #e3e9e5; --radius: 12px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--ink); }
+header { background: var(--accent); color: #fff; padding: 20px 32px; }
+header .brand { font-size: 1.6rem; font-weight: 700; }
+header p { margin: 4px 0 0; opacity: .9; }
+main { display: grid; grid-template-columns: 360px 1fr; gap: 24px; padding: 24px 32px; max-width: 1300px; margin: auto; }
+@media (max-width: 900px) { main { grid-template-columns: 1fr; padding: 16px; } }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+h2 { font-size: 1.1rem; margin: 0 0 12px; }
+h3 { font-size: .95rem; margin: 16px 0 6px; }
+form.panel { align-self: start; position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; }
+fieldset { border: none; border-top: 1px solid var(--line); padding: 10px 0 4px; margin: 0; }
+legend { font-weight: 600; color: var(--accent); padding-right: 8px; }
+label { display: block; font-size: .88rem; margin: 8px 0; color: var(--muted); }
+input, select { display: block; width: 100%; margin-top: 4px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; font: inherit; color: var(--ink); }
+input[type=range] { padding: 0; accent-color: var(--accent); }
+.val { float: right; font-weight: 600; color: var(--ink); }
+.hint { font-size: .82rem; color: var(--muted); }
+.cards { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+@media (max-width: 900px) { .cards { grid-template-columns: 1fr 1fr; } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; }
+.card.big { background: var(--accent); color: #fff; border: none; }
+.card .label { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; opacity: .8; }
+.card .value { font-size: 1.6rem; font-weight: 700; margin: 6px 0 2px; }
+.card.big .value { font-size: 2.3rem; }
+.card .sub, .sub { font-size: .8rem; opacity: .8; }
+.alert { padding: 12px 16px; border-radius: var(--radius); margin-bottom: 16px; font-size: .92rem; }
+.alert.ok { background: var(--accent-soft); color: var(--accent); }
+.alert.warning { background: #fdf3e1; color: var(--warn); }
+.alert.danger { background: #fbe9e7; color: var(--danger); }
+.hidden { display: none !important; }
+.error { color: var(--danger); }
+.top { margin-top: 0; }
+.bar-row { display: grid; grid-template-columns: 160px 1fr 170px; align-items: center; gap: 12px; margin: 8px 0; font-size: .9rem; }
+.bar-track { background: var(--accent-soft); border-radius: 6px; height: 14px; }
+.bar { background: var(--accent); height: 100%; border-radius: 6px; transition: width .3s; }
+.bar-val { text-align: right; color: var(--muted); }
+.tip { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); padding: 12px 0; }
+.tip p { margin: 4px 0 0; font-size: .88rem; color: var(--muted); }
+.tip-save { text-align: right; min-width: 150px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.save { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
+.tag { font-size: .7rem; background: #eef; color: #446; padding: 2px 6px; border-radius: 6px; }
+button { background: var(--accent); color: #fff; border: none; padding: 5px 12px; border-radius: 8px; cursor: pointer; font: inherit; font-size: .82rem; }
+button:hover { opacity: .9; }
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+td, th { padding: 7px 4px; border-bottom: 1px solid var(--line); text-align: left; }
+td:last-child, th:not(:first-child) { text-align: right; }
+tr.total td { font-weight: 700; }
+summary { cursor: pointer; }
+footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 16px; }
+.plan { display: flex; justify-content: space-between; align-items: center; border: 2px solid var(--accent); background: var(--accent-soft); }
+.plan .label { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--accent); }
+.plan-row { display: flex; align-items: baseline; gap: 14px; margin: 4px 0; }
+.plan-bill { font-size: 2rem; font-weight: 700; color: var(--accent); }
+.plan-save { font-weight: 600; color: var(--accent); }
+.tip.on { background: var(--accent-soft); margin: 0 -12px; padding: 12px; border-radius: 8px; }
+button.ghost { background: #fff; color: var(--accent); border: 1px solid var(--accent); }
+.btns { display: flex; gap: 6px; }
+.tip.accepted { background: #eef7f2; margin: 0 -12px; padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent); }
+.accepted-badge { color: var(--accent); font-weight: 600; font-size: .85rem; }
+.plan-list { margin: 0 0 12px; padding-left: 20px; }
+.plan-list li { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.plan-list li { display: list-item; }
+.plan-list li > span:first-child { display: inline-block; width: calc(100% - 170px); }
+.plan-item-save { float: right; color: var(--accent); font-weight: 600; }
+button.link { background: none; color: var(--muted); padding: 0 0 0 8px; text-decoration: underline; font-weight: 400; }
+.plan-total { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; background: var(--bg); padding: 14px; border-radius: 10px; }
+.plan-total div { display: flex; flex-direction: column; }
+.plan-total b { font-size: 1.15rem; }
+.green { color: var(--accent); }
+.plan-btns { display: flex; flex-direction: column; gap: 8px; }
+.accept-bar { display: flex; justify-content: space-between; align-items: center; background: var(--accent-soft); color: var(--accent); font-weight: 600; padding: 10px 14px; border-radius: 10px; margin-bottom: 8px; position: sticky; top: 8px; z-index: 2; }
+.accepted-note { margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.3); font-size: .78rem; line-height: 1.5; }
+button.link-light { background: none; color: #fff; text-decoration: underline; padding: 0 0 0 6px; font-size: .78rem; }

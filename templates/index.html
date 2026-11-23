@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BillWise · Electricity Bill Predictor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <div class="brand">⚡ BillWise</div>
+  <p>Predict your monthly TNB bill, see what costs the most, and get tips to save.</p>
+</header>
+
+<main>
+  <form id="form" class="panel">
+    <h2>Your household</h2>
+
+    <fieldset>
+      <legend>House</legend>
+      <label>People in the house <input type="number" name="occupants" value="5" min="1" max="20"></label>
+      <label>Everyone home this month?
+        <select name="all_home"><option>Yes</option><option value="No">Mostly (some away)</option></select></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Air-conditioners</legend>
+      <label>Number of ACs <input type="number" name="n_ac" value="3" min="0" max="10"></label>
+      <label>Typical horsepower
+        <select name="ac_hp"><option value="1">1 HP</option><option value="1.5" selected>1.5 HP</option>
+          <option value="2">2 HP</option><option value="">Don't know</option></select></label>
+      <label>Inverter type? <select name="inverter"><option>No</option><option>Yes</option></select></label>
+      <label>Hours on per AC per day <span class="val" data-for="ac_hours"></span>
+        <input type="range" name="ac_hours" value="6" min="0" max="24"></label>
+      <label>Temperature (°C) <span class="val" data-for="ac_temp"></span>
+        <input type="range" name="ac_temp" value="23" min="16" max="28"></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Water heater</legend>
+      <label>Electric water heater? <select name="heater"><option>Yes</option><option>No</option></select></label>
+      <label>Type <select name="heater_type"><option>Instant</option><option value="Storage tank">Storage tank</option></select></label>
+      <label>Hot shower minutes / person / day <span class="val" data-for="shower_min"></span>
+        <input type="range" name="shower_min" value="8" min="0" max="30"></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Other appliances</legend>
+      <label>Refrigerators <input type="number" name="fridges" value="1" min="0" max="5"></label>
+      <label>PC hours / day (all PCs) <input type="number" name="pc_hours" value="4" min="0" max="48"></label>
+      <label>Total fan hours / day <input type="number" name="fan_hours" value="12" min="0" max="100"></label>
+      <label>Number of lights <input type="number" name="lights" value="10" min="0" max="50"></label>
+      <label>Light hours / day <input type="number" name="light_hours" value="6" min="0" max="24"></label>
+      <label>Washing machine loads / week <input type="number" name="washer_loads" value="4" min="0" max="30"></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Optional (improves accuracy)</legend>
+      <label>Last month's usage (kWh, from your bill) <input type="number" name="prev_kwh" placeholder="e.g. 520" min="0"></label>
+      <label>Monthly budget (RM) <input type="number" name="budget" placeholder="e.g. 250" min="0"></label>
+    </fieldset>
+    <p class="hint">Results update automatically as you change the inputs.</p>
+  </form>
+
+  <section id="results">
+    <div id="error" class="panel error hidden"></div>
+
+    <div class="cards">
+      <div class="card big">
+        <span class="label">Predicted monthly bill</span>
+        <span class="value" id="bill">–</span>
+        <span class="sub" id="billRange"></span>
+        <div id="acceptedNote" class="accepted-note hidden"></div>
+      </div>
+      <div class="card"><span class="label">Usage</span><span class="value" id="kwh">–</span><span class="sub" id="daily"></span></div>
+      <div class="card"><span class="label">Per person</span><span class="value" id="perPerson">–</span><span class="sub">equal split</span></div>
+      <div class="card"><span class="label">Carbon footprint</span><span class="value" id="co2">–</span><span class="sub">kg CO₂ / month</span></div>
+    </div>
+
+    <div id="plan" class="panel plan hidden">
+      <div>
+        <span class="label">Preview: with selected changes</span>
+        <div class="plan-row">
+          <span class="plan-bill" id="planBill"></span>
+          <span class="plan-save" id="planSave"></span>
+        </div>
+        <span class="sub" id="planSub"></span>
+      </div>
+      <div class="plan-btns">
+        <button type="button" id="acceptAll">Accept selected</button>
+        <button type="button" id="planReset" class="ghost">Clear</button>
+      </div>
+    </div>
+
+    <div id="tier" class="alert"></div>
+    <div id="budget" class="alert hidden"></div>
+
+    <div class="panel">
+      <h2>Where your money goes</h2>
+      <p class="top" id="top"></p>
+      <div id="breakdown"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Energy-saving recommendations</h2>
+      <p class="hint">Click <b>Try it</b> on the tips you like, then press <b>Accept selected</b> to apply them to your bill.</p>
+      <div id="acceptBar" class="accept-bar hidden">
+        <span id="acceptBarText"></span>
+        <button type="button" id="acceptAll2">Accept selected</button>
+      </div>
+      <div id="tips"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Bill details</h2>
+      <table id="billTable"></table>
+      <p class="hint" id="modelNote"></p>
+    </div>
+
+    <details class="panel">
+      <summary><h2 style="display:inline">About the model</h2></summary>
+      <div id="modelInfo">Loading…</div>
+    </details>
+  </section>
+</main>
+
+<footer>All values are estimates. Tariff: TNB domestic (from 1 July 2025), exemption threshold {{ threshold }} kWh.</footer>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
